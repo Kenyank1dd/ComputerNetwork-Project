@@ -1,6 +1,5 @@
-<<<<<<< HEAD
+# ComputerNetwork-Project
 Stanford CS 144 Networking Lab
-==============================
 
 These labs are open to the public under the (friendly) request that to
 preserve their value as a teaching tool, solutions not be posted
@@ -19,6 +18,4 @@ To run speed benchmarks: `cmake --build build --target speed`
 To run clang-tidy (which suggests improvements): `cmake --build build --target tidy`
 
 To format code: `cmake --build build --target format`
-=======
-# ComputerNetwork-Project
->>>>>>> b802bb8882a971a5d02ef364e4da88e93fbbbe59
+
