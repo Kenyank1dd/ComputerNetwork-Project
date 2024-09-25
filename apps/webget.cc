@@ -12,18 +12,18 @@ void get_URL( const string& host, const string& path )
   TCPSocket socket;
 
   // 建立连接
-  Address host_addr = Address(host, "http");
-  socket.connect(host_addr);
+  Address host_addr = Address( host, "http" );
+  socket.connect( host_addr );
 
   // 发送请求报文
-  vector<string> request = {"GET " + path + " HTTP/1.1\r\n", "Host: " + host + "\r\n",
-                            "Connection: close\r\n", "\r\n"};
-  socket.write(request);
-  socket.shutdown(SHUT_WR);
+  vector<string> request
+    = { "GET " + path + " HTTP/1.1\r\n", "Host: " + host + "\r\n", "Connection: close\r\n", "\r\n" };
+  socket.write( request );
+  socket.shutdown( SHUT_WR );
 
   string buffer;
-  while(!socket.eof()) {
-    socket.read(buffer);
+  while ( !socket.eof() ) {
+    socket.read( buffer );
     cout << buffer;
   }
 

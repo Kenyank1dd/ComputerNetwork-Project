@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <queue>
 #include <string>
 #include <string_view>
-#include <queue>
 
 class Reader;
 class Writer;
@@ -30,7 +30,7 @@ protected:
   uint64_t num_bytes_pushed;
   uint64_t num_bytes_popped;
   uint64_t num_bytes_buffered;
-  std::deque<std::string> bytes_queue; 
+  std::deque<std::string> bytes_queue;
 };
 
 class Writer : public ByteStream
