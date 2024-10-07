@@ -22,7 +22,7 @@ def count_lines(filename):
     report = subprocess.run(['sloccount', full_filename], capture_output=True)
     report.check_returncode()
     loc = re.search(r'Total Physical Source Lines of Code \(SLOC\) * = (\d+)',
-                    report.stdout.decode('ascii'))
+                    report.stdout.decode('utf-8'))
     return int(loc.group(1))
 
 
