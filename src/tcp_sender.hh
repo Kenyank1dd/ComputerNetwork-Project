@@ -11,12 +11,43 @@
 #include <optional>
 #include <queue>
 
+// 超时计时器
+class RetransmissionTimer
+{
+public:
+  RetransmissionTimer( uint64_t initial_RTO_ms ) : RTO( initial_RTO_ms ) {}
+  bool is_expired() const { return status_active && consumed_time >= RTO; }
+  bool is_active() const { return status_active; }
+  void start()
+  {
+    status_active = true;
+    reset();
+  }
+  void stop()
+  {
+    status_active = false;
+    reset();
+  }
+  void exponential_backoff() { RTO <<= 1; }
+  void reset() { consumed_time = 0; }
+  RetransmissionTimer& tick( uint64_t ms_since_last_tick )
+  {
+    consumed_time += status_active ? ms_since_last_tick : 0;
+    return *this;
+  }
+
+private:
+  uint64_t RTO;
+  uint64_t consumed_time {};
+  bool status_active {};
+};
+
 class TCPSender
 {
 public:
   /* Construct TCP sender with given default Retransmission Timeout and possible ISN */
   TCPSender( ByteStream&& input, Wrap32 isn, uint64_t initial_RTO_ms )
-    : input_( std::move( input ) ), isn_( isn ), initial_RTO_ms_( initial_RTO_ms )
+    : input_( std::move( input ) ), isn_( isn ), initial_RTO_ms_( initial_RTO_ms ), timer( initial_RTO_ms )
   {}
 
   /* Generate an empty TCPSenderMessage */
@@ -48,4 +79,15 @@ private:
   ByteStream input_;
   Wrap32 isn_;
   uint64_t initial_RTO_ms_;
+
+  RetransmissionTimer timer;
+  uint16_t window_size { 1 };
+  uint64_t nxt_seqno {};
+  uint64_t ack_seqno {};
+
+  std::queue<TCPSenderMessage> msg_queue {};
+  uint64_t num_flight {};
+  uint64_t num_retrans {};
+
+  bool SYN_sent {}, FIN_sent {};
 };
