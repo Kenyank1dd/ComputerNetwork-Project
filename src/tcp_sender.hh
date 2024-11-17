@@ -11,7 +11,6 @@
 #include <optional>
 #include <queue>
 
-// 超时计时器
 class RetransmissionTimer
 {
 public:
